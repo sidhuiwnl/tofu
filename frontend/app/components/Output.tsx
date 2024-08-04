@@ -2,9 +2,9 @@
 
 import { Box,Text,Button } from "@chakra-ui/react";
 import  { executeCode } from  "@/lib/api"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
-
+import { useWebsocket } from "@/hooks/useWebsocket";
 
 export default function Output({editorRef,language} : {editorRef: any,language : string}) {
   const toast = useToast();
@@ -12,13 +12,41 @@ export default function Output({editorRef,language} : {editorRef: any,language :
    const [isLoading,setIsLoading] = useState(false);
    const [isError,setIsError] = useState(false);
 
+   const { socket,isConnected,sendMessage} = useWebsocket("ws://localhost:8000");
+
+   useEffect(() => {
+    if (socket) {
+      const handleMessage = (event: MessageEvent) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'output') {
+          setCodeOutput(data.output);
+        }
+      };
+
+      socket.addEventListener('message', handleMessage);
+
+      return () => {
+        socket.removeEventListener('message', handleMessage);
+      };
+    }
+  }, [socket]);
+
+ 
   const output = async () =>{
     setIsLoading(true);
     const sourceCode = editorRef.current.getValue();
     if(!sourceCode) return
     try {
       const {run : result} = await executeCode(language,sourceCode);
-      setCodeOutput(result.output.split("\n"));
+      const outputLines = result.output.split("\n");
+      setCodeOutput(outputLines);
+
+      if (isConnected) {
+        sendMessage({
+          type: "output",
+          output: outputLines
+        });
+      }
       
       result.stderr ? setIsError(true) : setIsError(false);
       
@@ -34,6 +62,8 @@ export default function Output({editorRef,language} : {editorRef: any,language :
       setIsLoading(false);
     }
   }
+
+
   return (
     <Box ml={2} className="p-4">
       <Text mb={4} fontSize="lg">
@@ -58,8 +88,8 @@ export default function Output({editorRef,language} : {editorRef: any,language :
         borderColor={isError ? "red.500" : "#333"}
       >
         <Text mb={2} fontSize=" lg">{ codeOutput ? 
-          codeOutput.map(code =>(
-            <Text><code>{code}</code></Text>
+          codeOutput.map((code,index) =>(
+            <Text key={index}><code>{code}</code></Text>
           ))
 
         : "Click Run Code to see the output here"}</Text>
