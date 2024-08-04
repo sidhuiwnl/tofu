@@ -13,7 +13,7 @@ export default function Home() {
 
         <p className="text-neutral-500 max-w-lg mx-auto my-2 text-sm text-center relative z-10">
           The simple standalone Editor for your small problem to run and get
-          output in faster response time
+          output in faster response time with the power of WebSocket to show your live coding and approaches to others
         </p>
         <Link href={"/CodeEditor"} className=" z-10 text-lg inline-flex h-12 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 mt-4">
           Editor
