@@ -6,8 +6,8 @@ const wss = new WebSocket.Server({port : 8000});
 wss.on('connection',(ws) =>{
     console.log("a client connected");
 
-    ws.on('message',(message) =>{
-        const data = JSON.parse(message);
+    ws.on('message',(message : WebSocket.RawData) =>{
+        const data = JSON.parse(message.toString());
         
         // Broadcast the message to all clients except the sender
         wss.clients.forEach((client) => {

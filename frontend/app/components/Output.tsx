@@ -1,6 +1,6 @@
 'use client'
 
-import { Box,Text,Button } from "@chakra-ui/react";
+import { Box,Text,Button,VStack } from "@chakra-ui/react";
 import  { executeCode } from  "@/lib/api"
 import { useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
@@ -87,12 +87,15 @@ export default function Output({editorRef,language} : {editorRef: any,language :
         borderRadius={4}
         borderColor={isError ? "red.500" : "#333"}
       >
-        <Text mb={2} fontSize=" lg">{ codeOutput ? 
-          codeOutput.map((code,index) =>(
-            <Text key={index}><code>{code}</code></Text>
-          ))
-
-        : "Click Run Code to see the output here"}</Text>
+        {codeOutput.length > 0 ? (
+           <VStack align="start" spacing={1}>
+           {codeOutput.map((code, index) => (
+             <Text key={index}><code>{code}</code></Text>
+           ))}
+         </VStack>
+        ) : (
+          <Text>Click Run Code to see the output here</Text>
+        )}
     </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ const wss = new ws_1.default.Server({ port: 8000 });
 wss.on('connection', (ws) => {
     console.log("a client connected");
     ws.on('message', (message) => {
-        const data = JSON.parse(message);
+        const data = JSON.parse(message.toString());
         // Broadcast the message to all clients except the sender
         wss.clients.forEach((client) => {
             if (client !== ws && client.readyState === ws_1.default.OPEN) {
