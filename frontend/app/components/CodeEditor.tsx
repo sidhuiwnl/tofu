@@ -12,7 +12,7 @@ export default function TheEditorComponent(){
     const editorRef = useRef();
     const [value,setValue] = useState<string | undefined>("");
     const [language,setLanguage] = useState("javascript");
-    const { socket, isConnected, sendMessage } = useWebsocket("ws://localhost:8000");
+    const { socket, isConnected, sendMessage } = useWebsocket("https://tofu-0w3t.onrender.com");
 
     
     useEffect(() =>{
