@@ -12,7 +12,7 @@ export default function Output({editorRef,language} : {editorRef: any,language :
    const [isLoading,setIsLoading] = useState(false);
    const [isError,setIsError] = useState(false);
 
-   const { socket,isConnected,sendMessage} = useWebsocket("ws://localhost:8000");
+   const { socket,isConnected,sendMessage} = useWebsocket("https://tofu-9j1l.onrender.com");
 
    useEffect(() => {
     if (socket) {
